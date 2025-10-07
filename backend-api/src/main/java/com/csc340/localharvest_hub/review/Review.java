@@ -6,7 +6,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.time.LocalDateTime;
 
 import com.csc340.localharvest_hub.customer.Customer;
@@ -23,12 +24,12 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    @JsonBackReference(value = "customer-reviews")
+    @JsonIgnoreProperties({"reviews", "subscriptions"})
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "produce_box_id", nullable = false)
-    @JsonBackReference(value = "producebox-reviews")
+    @JsonIgnoreProperties("reviews")
     private ProduceBox produceBox;
 
     @NotNull

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class Customer {
     private String password;
 
     @OneToMany(mappedBy = "customer")
-    @JsonManagedReference
+    @JsonIgnoreProperties("customer")
     private List<Subscription> subscriptions = new ArrayList<>();
 
     @NotBlank

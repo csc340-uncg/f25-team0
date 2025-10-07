@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class Farm {
 
     @OneToOne
     @JoinColumn(name = "farmer_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnoreProperties("farm")
     private Farmer farmer;
 
     @NotBlank
@@ -39,6 +38,6 @@ public class Farm {
     private String location;
 
     @OneToMany(mappedBy = "farm", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnoreProperties("farm")
     private List<ProduceBox> produceBoxes = new ArrayList<>();
 }

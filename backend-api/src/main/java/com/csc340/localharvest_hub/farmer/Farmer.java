@@ -5,8 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.csc340.localharvest_hub.farm.Farm;
 
 @Data
@@ -32,7 +31,7 @@ public class Farmer {
     private String password;
 
     @OneToOne(mappedBy = "farmer", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnoreProperties("farmer")
     private Farm farm;
 
     private String phoneNumber;

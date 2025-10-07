@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDateTime;
 
 import com.csc340.localharvest_hub.customer.Customer;
@@ -21,12 +21,12 @@ public class Subscription {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    @JsonBackReference(value = "customer-subscriptions")
+    @JsonIgnoreProperties("subscriptions")
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "produce_box_id", nullable = false)
-    @JsonBackReference(value = "producebox-subscriptions")
+    @JsonIgnoreProperties({"subscriptions", "reviews"})
     private ProduceBox produceBox;
 
     @NotNull

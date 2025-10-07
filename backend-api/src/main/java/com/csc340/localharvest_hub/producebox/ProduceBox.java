@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class ProduceBox {
 
     @ManyToOne
     @JoinColumn(name = "farm_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnoreProperties("produceBoxes")
     private Farm farm;
 
     @NotBlank
@@ -45,10 +45,10 @@ public class ProduceBox {
     private boolean available = true;
 
     @OneToMany(mappedBy = "produceBox", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnoreProperties("produceBox")
     private List<Subscription> subscriptions = new ArrayList<>();
 
     @OneToMany(mappedBy = "produceBox", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnoreProperties("produceBox")
     private List<Review> reviews = new ArrayList<>();
 }
