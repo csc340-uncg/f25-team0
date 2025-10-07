@@ -1,4 +1,4 @@
-package com.csc340.localharvest_hub.user;
+package com.csc340.localharvest_hub.customer;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,19 +14,21 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     public Customer createCustomer(Customer customer) {
-        customer.setRole(UserRole.CUSTOMER);
+        if (customerRepository.existsByEmail(customer.getEmail())) {
+            throw new IllegalStateException("Email already registered");
+        }
         return customerRepository.save(customer);
     }
 
     public Customer updateCustomer(Long id, Customer customerDetails) {
         Customer customer = customerRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
-        
+
         customer.setName(customerDetails.getName());
         customer.setEmail(customerDetails.getEmail());
         customer.setShippingAddress(customerDetails.getShippingAddress());
         customer.setPhoneNumber(customerDetails.getPhoneNumber());
-        
+
         return customerRepository.save(customer);
     }
 

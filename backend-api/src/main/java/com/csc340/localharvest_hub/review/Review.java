@@ -6,10 +6,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDateTime;
 
+import com.csc340.localharvest_hub.customer.Customer;
 import com.csc340.localharvest_hub.producebox.ProduceBox;
-import com.csc340.localharvest_hub.user.User;
 
 @Data
 @NoArgsConstructor
@@ -21,36 +22,31 @@ public class Review {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User customer;
+    @JoinColumn(name = "customer_id", nullable = false)
+    @JsonBackReference(value = "customer-reviews")
+    private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "produce_box_id", nullable = false)
+    @JsonBackReference(value = "producebox-reviews")
     private ProduceBox produceBox;
 
     @NotNull
     @Min(1)
     @Max(5)
-    private Integer freshnessRating;
+    private Double freshnessRating;
 
     @NotNull
     @Min(1)
     @Max(5)
-    private Integer deliveryRating;
+    private Double deliveryRating;
 
-    @NotNull
     @Min(1)
     @Max(5)
-    private Integer overallRating;
+    private Double overallRating;
 
     @Column(columnDefinition = "TEXT")
     private String comment;
-
-    @PrePersist
-    @PreUpdate
-    private void calculateOverallRating() {
-        this.overallRating = Math.round((float)(freshnessRating + deliveryRating) / 2);
-    }
 
     @NotNull
     private LocalDateTime createdAt = LocalDateTime.now();

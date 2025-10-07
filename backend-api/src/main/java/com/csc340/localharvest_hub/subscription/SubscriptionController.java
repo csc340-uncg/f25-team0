@@ -1,7 +1,8 @@
 package com.csc340.localharvest_hub.subscription;
 
+import com.csc340.localharvest_hub.customer.CustomerService;
+import com.csc340.localharvest_hub.farmer.FarmerService;
 import com.csc340.localharvest_hub.producebox.ProduceBoxService;
-import com.csc340.localharvest_hub.user.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
-    private final UserService userService;
     private final ProduceBoxService produceBoxService;
+    private final CustomerService customerService;
+    private final FarmerService farmerService;
 
     @PostMapping
     public ResponseEntity<Subscription> createSubscription(@Valid @RequestBody Subscription subscription) {
@@ -36,7 +38,7 @@ public class SubscriptionController {
 
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<List<Subscription>> getCustomerSubscriptions(@PathVariable Long customerId) {
-        return ResponseEntity.ok(subscriptionService.getActiveSubscriptionsByCustomer(userService.getUserById(customerId)));
+        return ResponseEntity.ok(subscriptionService.getActiveSubscriptionsByCustomer(customerService.getCustomerById(customerId)));
     }
 
     @GetMapping("/box/{boxId}")
@@ -46,6 +48,6 @@ public class SubscriptionController {
 
     @GetMapping("/farmer/{farmerId}")
     public ResponseEntity<List<Subscription>> getFarmerSubscriptions(@PathVariable Long farmerId) {
-        return ResponseEntity.ok(subscriptionService.getSubscriptionsByFarmer(userService.getUserById(farmerId)));
+        return ResponseEntity.ok(subscriptionService.getSubscriptionsByFarmer(farmerService.getFarmerById(farmerId)));
     }
 }

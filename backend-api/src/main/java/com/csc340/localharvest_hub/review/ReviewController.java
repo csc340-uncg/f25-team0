@@ -1,8 +1,9 @@
 package com.csc340.localharvest_hub.review;
 
+import com.csc340.localharvest_hub.customer.CustomerService;
+import com.csc340.localharvest_hub.farmer.FarmerService;
 import com.csc340.localharvest_hub.producebox.ProduceBox;
 import com.csc340.localharvest_hub.producebox.ProduceBoxService;
-import com.csc340.localharvest_hub.user.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,9 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
-    private final UserService userService;
     private final ProduceBoxService produceBoxService;
+    private  final CustomerService customerService;
+    private final FarmerService farmerService;;
 
     @PostMapping
     public ResponseEntity<Review> createReview(@Valid @RequestBody Review review) {
@@ -44,12 +46,12 @@ public class ReviewController {
 
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<List<Review>> getCustomerReviews(@PathVariable Long customerId) {
-        return ResponseEntity.ok(reviewService.getReviewsByCustomer(userService.getUserById(customerId)));
+        return ResponseEntity.ok(reviewService.getReviewsByCustomer(customerService.getCustomerById(customerId)));
     }
 
     @GetMapping("/farmer/{farmerId}")
     public ResponseEntity<List<Review>> getFarmerReviews(@PathVariable Long farmerId) {
-        return ResponseEntity.ok(reviewService.getReviewsByFarmer(userService.getUserById(farmerId)));
+        return ResponseEntity.ok(reviewService.getReviewsByFarmer(farmerService.getFarmerById(farmerId)));
     }
 
     @GetMapping("/box/{boxId}/ratings")

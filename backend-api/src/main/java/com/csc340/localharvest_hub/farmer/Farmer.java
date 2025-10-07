@@ -1,17 +1,19 @@
-package com.csc340.localharvest_hub.user;
+package com.csc340.localharvest_hub.farmer;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import com.csc340.localharvest_hub.farm.Farm;
 
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+@Table(name = "farmers")
+public class Farmer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,7 +31,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role;
+    @OneToOne(mappedBy = "farmer", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Farm farm;
+
+    private String phoneNumber;
+
+    public Farmer(Long id) {
+        this.id = id;
+    }
 }

@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.csc340.localharvest_hub.farmer.Farmer;
 import com.csc340.localharvest_hub.producebox.ProduceBox;
-import com.csc340.localharvest_hub.user.User;
 
 @Data
 @NoArgsConstructor
@@ -22,8 +24,9 @@ public class Farm {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User farmer;
+    @JoinColumn(name = "farmer_id", nullable = false)
+    @JsonBackReference
+    private Farmer farmer;
 
     @NotBlank
     @Column(nullable = false)
@@ -36,5 +39,6 @@ public class Farm {
     private String location;
 
     @OneToMany(mappedBy = "farm", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<ProduceBox> produceBoxes = new ArrayList<>();
 }

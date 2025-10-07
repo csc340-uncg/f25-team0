@@ -1,12 +1,11 @@
 package com.csc340.localharvest_hub.farm;
 
-import com.csc340.localharvest_hub.user.User;
-import com.csc340.localharvest_hub.user.UserService;
 import com.csc340.localharvest_hub.subscription.SubscriptionRepository;
 
 import com.csc340.localharvest_hub.subscription.Subscription;
 
 import com.csc340.localharvest_hub.review.ReviewRepository;
+import com.csc340.localharvest_hub.farmer.FarmerService;
 import com.csc340.localharvest_hub.producebox.ProduceBox;
 import com.csc340.localharvest_hub.producebox.ProduceBoxRepository;
 import com.csc340.localharvest_hub.review.Review;
@@ -31,11 +30,11 @@ public class FarmStatisticsService {
     private final SubscriptionRepository subscriptionRepository;
     private final ProduceBoxRepository produceBoxRepository;
     private final ReviewRepository reviewRepository;
-    private final UserService userService;
+    private final FarmerService farmerService;
 
 
     public FarmStatistics getFarmStatistics(Long farmerId) {
-        Farm farm = farmRepository.findByFarmer(getUserById(farmerId))
+        Farm farm = farmRepository.findByFarmer(farmerService.getFarmerById(farmerId))
                 .orElseThrow(() -> new EntityNotFoundException("Farm not found"));
 
         FarmStatistics stats = new FarmStatistics();
@@ -162,22 +161,19 @@ public class FarmStatisticsService {
         stats.setResponseRate(allReviews.isEmpty() ? 0.0 : (double) reviewsWithResponse / allReviews.size() * 100);
 
         // Rating distribution
-        Map<Integer, Long> distribution = allReviews.stream()
+        Map<Double, Long> distribution = allReviews.stream()
                 .collect(Collectors.groupingBy(
-                        Review::getOverallRating,
+                        review -> review.getOverallRating(),
                         Collectors.counting()));
         stats.setRatingDistribution(distribution);
     }
 
     private double calculateAverageRating(List<Review> reviews,
-            java.util.function.Function<Review, Integer> ratingExtractor) {
+            java.util.function.Function<Review, Double> ratingExtractor) {
         return reviews.stream()
-                .mapToInt(ratingExtractor::apply)
+                .mapToDouble(ratingExtractor::apply)
                 .average()
                 .orElse(0.0);
     }
 
-    private User getUserById(Long id) {
-        return userService.getUserById(id);
-    }
 }

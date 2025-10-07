@@ -1,7 +1,8 @@
 package com.csc340.localharvest_hub.review;
 
+import com.csc340.localharvest_hub.customer.Customer;
+import com.csc340.localharvest_hub.farmer.Farmer;
 import com.csc340.localharvest_hub.producebox.ProduceBox;
-import com.csc340.localharvest_hub.user.User;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,40 +18,44 @@ import java.util.OptionalDouble;
 @Transactional
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    
+
     public double getAverageOverallRating(ProduceBox produceBox) {
         List<Review> reviews = reviewRepository.findByProduceBox(produceBox);
         OptionalDouble average = reviews.stream()
-            .mapToInt(Review::getOverallRating)
-            .average();
+                .mapToDouble(review -> review.getOverallRating() != null ? review.getOverallRating() : 0.0)
+                .average();
         return average.orElse(0.0);
     }
 
     public double getAverageFreshnessRating(ProduceBox produceBox) {
         List<Review> reviews = reviewRepository.findByProduceBox(produceBox);
         OptionalDouble average = reviews.stream()
-            .mapToInt(Review::getFreshnessRating)
-            .average();
+                .mapToDouble(review -> review.getFreshnessRating() != null ? review.getFreshnessRating() : 0.0)
+                .average();
         return average.orElse(0.0);
     }
 
     public double getAverageDeliveryRating(ProduceBox produceBox) {
         List<Review> reviews = reviewRepository.findByProduceBox(produceBox);
         OptionalDouble average = reviews.stream()
-            .mapToInt(Review::getDeliveryRating)
-            .average();
+                .mapToDouble(review -> review.getDeliveryRating() != null ? review.getDeliveryRating() : 0.0)
+                .average();
         return average.orElse(0.0);
     }
 
     public Review createReview(Review review) {
+        double freshnessRating = review.getFreshnessRating() != null ? review.getFreshnessRating() : 0;
+        double deliveryRating = review.getDeliveryRating() != null ? review.getDeliveryRating() : 0;
+
+        review.setOverallRating(Double.valueOf(freshnessRating + deliveryRating) / 2);
         review.setCreatedAt(LocalDateTime.now());
         return reviewRepository.save(review);
     }
 
     public Review addFarmerResponse(Long id, String response) {
         Review review = reviewRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Review not found"));
-        
+                .orElseThrow(() -> new EntityNotFoundException("Review not found"));
+
         review.setFarmerResponse(response);
         review.setFarmerResponseDate(LocalDateTime.now());
         return reviewRepository.save(review);
@@ -67,11 +72,11 @@ public class ReviewService {
         return reviewRepository.findByProduceBox(produceBox);
     }
 
-    public List<Review> getReviewsByCustomer(User customer) {
+    public List<Review> getReviewsByCustomer(Customer customer) {
         return reviewRepository.findByCustomer(customer);
     }
 
-    public List<Review> getReviewsByFarmer(User farmer) {
+    public List<Review> getReviewsByFarmer(Farmer farmer) {
         return reviewRepository.findByProduceBoxFarmFarmer(farmer);
     }
 }
