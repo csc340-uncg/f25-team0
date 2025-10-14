@@ -8,7 +8,10 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-success mb-4">
         <div class="container">
-            <a class="navbar-brand" href="/">LocalHarvest Hub</a>
+            <a class="navbar-brand" href="/">
+                <img src="/images/localharvest-logo.png" alt="LocalHarvest Hub" height="30" class="d-inline-block align-text-top me-2">
+                LocalHarvest Hub
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
