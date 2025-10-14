@@ -24,6 +24,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/customers/dashboard">Dashboard</a>
                             </li>
+                             <li class="nav-item">
+                                <a class="nav-link" href="/customers/boxes">Browse Boxes</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/customers/logout">Logout</a>
                             </li>
@@ -52,8 +55,9 @@
     <div class="row">
         <div class="col-md-4">
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Profile Information</h5>
+                    <a href="/farmers/profile/edit" class="btn btn-sm btn-outline-primary">Edit Profile</a>
                 </div>
                 <div class="card-body">
                     <p><strong>Name:</strong> ${farmer.name}</p>
@@ -61,7 +65,13 @@
                     <p><strong>Phone:</strong> ${farmer.phoneNumber!'-'}</p>
                     <#if farmer.farm??>
                         <hr>
-                        <h6>Farm Details</h6>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">Farm Details</h6>
+                            <div>
+                                <a href="/farmers/statistics" class="btn btn-sm btn-outline-info me-2">View Statistics</a>
+                                <a href="/farmers/farm/edit" class="btn btn-sm btn-outline-primary">Edit Farm</a>
+                            </div>
+                        </div>
                         <p><strong>Farm Name:</strong> ${farmer.farm.farmName}</p>
                         <p><strong>Location:</strong> ${farmer.farm.location}</p>
                         <#if farmer.farm.description??>
@@ -70,7 +80,7 @@
                     <#else>
                         <div class="alert alert-info">
                             Please set up your farm details to start selling produce.
-                            <a href="/farms/setup" class="btn btn-primary btn-sm mt-2">Set Up Farm</a>
+                            <a href="/farmers/farm/setup" class="btn btn-primary btn-sm mt-2">Set Up Farm</a>
                         </div>
                     </#if>
                 </div>
@@ -80,8 +90,15 @@
             <#if farmer.farm??>
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">My Produce Boxes</h5>
-                        <a href="/produce-boxes/new" class="btn btn-success btn-sm">Add New Box</a>
+                        <div>
+                            <h5 class="card-title mb-0">My Produce Boxes</h5>
+                            <div>
+                                <a href="/farmers/subscriptions" class="btn btn-link btn-sm ps-0">View Subscriptions</a>
+                                <span class="text-muted">|</span>
+                                <a href="/farmers/reviews" class="btn btn-link btn-sm">Manage Reviews</a>
+                            </div>
+                        </div>
+                        <a href="/farmers/boxes/new" class="btn btn-success btn-sm">Add New Box</a>
                     </div>
                     <div class="card-body">
                         <#if farmer.farm.produceBoxes?? && farmer.farm.produceBoxes?size gt 0>
@@ -100,7 +117,7 @@
                                                 <small>${box.description!''}</small>
                                             </div>
                                             <div>
-                                                <a href="/produce-boxes/${box.id}/edit" class="btn btn-sm btn-outline-primary">Edit</a>
+                                                <a href="/farmers/boxes/${box.id}/edit" class="btn btn-sm btn-outline-primary">Edit</a>
                                             </div>
                                         </div>
                                     </div>
@@ -108,7 +125,7 @@
                             </div>
                         <#else>
                             <p>No produce boxes yet. Add your first box to start selling!</p>
-                            <a href="/produce-boxes/new" class="btn btn-success">Add First Box</a>
+                            <a href="/farmers/boxes/new" class="btn btn-success">Add First Box</a>
                         </#if>
                     </div>
                 </div>
