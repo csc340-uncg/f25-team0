@@ -41,8 +41,3 @@ public class Subscription {
     @NotNull
     private boolean active = true;
 }
-
-enum SubscriptionType {
-    ONE_TIME,
-    MONTHLY
-}

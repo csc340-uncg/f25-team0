@@ -1,7 +1,7 @@
 package com.csc340.localharvest_hub.mvc.controller;
 
-import com.csc340.localharvest_hub.mvc.dto.FarmerDTO;
-import com.csc340.localharvest_hub.mvc.service.FarmerService;
+import com.csc340.localharvest_hub.farmer.Farmer;
+import com.csc340.localharvest_hub.farmer.FarmerService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,12 +18,12 @@ public class FarmerMvcController {
 
     @GetMapping("/signup")
     public String signupForm(Model model) {
-        model.addAttribute("farmer", new FarmerDTO());
+        model.addAttribute("farmer", new Farmer());
         return "farmer/signup";
     }
 
     @PostMapping("/signup")
-    public String signup(@ModelAttribute FarmerDTO farmer) {
+    public String signup(@ModelAttribute Farmer farmer) {
         farmerService.createFarmer(farmer);
         return "redirect:/signin";
     }
@@ -31,7 +31,7 @@ public class FarmerMvcController {
     @PostMapping("/signin")
     public String signin(@RequestParam String email, @RequestParam String password, HttpSession session) {
         try {
-            FarmerDTO farmer = farmerService.authenticate(email, password);
+            Farmer farmer = farmerService.authenticate(email, password);
             session.setAttribute("farmerId", farmer.getId());
             return "redirect:/farmers/dashboard";
         } catch (Exception e) {
@@ -45,7 +45,7 @@ public class FarmerMvcController {
         if (farmerId == null) {
             return "redirect:/signin";
         }
-        FarmerDTO farmer = farmerService.getFarmer(farmerId);
+        Farmer farmer = farmerService.getFarmerById(farmerId);
         model.addAttribute("farmer", farmer);
         return "farmer/dashboard";
     }

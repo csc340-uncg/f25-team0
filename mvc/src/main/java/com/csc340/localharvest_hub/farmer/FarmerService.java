@@ -20,11 +20,11 @@ public class FarmerService {
 
     public Farmer updateFarmer(Long id, Farmer farmerDetails) {
         Farmer farmer = farmerRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Farmer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Farmer not found"));
 
         farmer.setName(farmerDetails.getName());
         if (!farmer.getEmail().equals(farmerDetails.getEmail()) &&
-            farmerRepository.existsByEmail(farmerDetails.getEmail())) {
+                farmerRepository.existsByEmail(farmerDetails.getEmail())) {
             throw new IllegalStateException("Email already registered");
         }
         farmer.setEmail(farmerDetails.getEmail());
@@ -35,11 +35,20 @@ public class FarmerService {
 
     public Farmer getFarmerById(Long id) {
         return farmerRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Farmer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Farmer not found"));
     }
 
     public Farmer getFarmerByEmail(String email) {
         return farmerRepository.findByEmail(email)
-            .orElseThrow(() -> new EntityNotFoundException("Farmer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Farmer not found"));
+    }
+
+    public Farmer authenticate(String email, String password) {
+        Farmer farmer = farmerRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+        if (!farmer.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Invalid email or password");
+        }
+        return farmer;
     }
 }
