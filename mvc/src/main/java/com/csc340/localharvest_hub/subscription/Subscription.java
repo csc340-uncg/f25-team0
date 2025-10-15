@@ -40,4 +40,6 @@ public class Subscription {
 
     @NotNull
     private boolean active = true;
+
+    private LocalDateTime lastDeliveryDate;
 }

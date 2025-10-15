@@ -23,30 +23,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/">Home</a>
                     </li>
-                    <#if customerId?? || farmerId??>
-                        <#if customerId??>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/customers/dashboard">Dashboard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/customers/logout">Logout</a>
-                            </li>
-                            <#else>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/farmers/dashboard">Dashboard</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/farmers/logout">Logout</a>
-                                </li>
-                        </#if>
-                        <#else>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/signin">Sign In</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/signup">Sign Up</a>
-                            </li>
-                    </#if>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signin">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">Sign Up</a>
+                    </li>
                 </ul>
             </div>
         </div>
