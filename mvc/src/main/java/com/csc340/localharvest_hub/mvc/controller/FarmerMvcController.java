@@ -10,6 +10,7 @@ import com.csc340.localharvest_hub.producebox.ProduceBox;
 import com.csc340.localharvest_hub.producebox.ProduceBoxService;
 import com.csc340.localharvest_hub.review.Review;
 import com.csc340.localharvest_hub.review.ReviewService;
+import com.csc340.localharvest_hub.subscription.SubscriptionService;
 
 import java.util.List;
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/farmers")
@@ -27,17 +29,20 @@ public class FarmerMvcController {
     private final FarmService farmService;
     private final FarmStatisticsService farmStatisticsService;
     private final ReviewService reviewService;
+    private final SubscriptionService subscriptionService;
+
 
     public FarmerMvcController(FarmerService farmerService,
                              ProduceBoxService produceBoxService,
                              FarmService farmService,
                              FarmStatisticsService farmStatisticsService,
-                             ReviewService reviewService) {
+                             ReviewService reviewService, SubscriptionService subscriptionService) {
         this.farmerService = farmerService;
         this.produceBoxService = produceBoxService;
         this.farmService = farmService;
         this.farmStatisticsService = farmStatisticsService;
         this.reviewService = reviewService;
+        this.subscriptionService = subscriptionService;
     }
 
     @GetMapping("/signup")
@@ -366,4 +371,22 @@ public class FarmerMvcController {
 
         return "redirect:/farmers/dashboard";
     }
+
+    @PostMapping("/subscriptions/{id}/delivery")
+public String recordDelivery(@PathVariable Long id,
+                           @RequestParam String deliveryDate,
+                           HttpSession session) {
+    Long farmerId = (Long) session.getAttribute("farmerId");
+    if (farmerId == null) {
+        return "redirect:/signin";
+    }
+
+    try {
+        LocalDateTime deliveryDateTime = LocalDateTime.parse(deliveryDate);
+        subscriptionService.recordDelivery(id, deliveryDateTime);
+        return "redirect:/farmers/subscriptions";
+    } catch (Exception e) {
+        return "redirect:/farmers/subscriptions";
+    }
+}
 }

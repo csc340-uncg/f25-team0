@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -50,5 +51,13 @@ public class SubscriptionService {
 
     public List<Subscription> getSubscriptionsByFarmer(Farmer farmer) {
         return subscriptionRepository.findByProduceBoxFarmFarmer(farmer);
+    }
+
+    public Subscription recordDelivery(Long id, LocalDateTime deliveryDate) {
+        Subscription subscription = subscriptionRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Subscription not found"));
+
+        subscription.setLastDeliveryDate(deliveryDate);
+        return subscriptionRepository.save(subscription);
     }
 }

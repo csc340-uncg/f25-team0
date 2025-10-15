@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Box Subscriptions - LocalHarvest Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-success mb-4">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <img src="/images/localharvest-logo.png" alt="LocalHarvest Hub" height="30" class="d-inline-block align-text-top me-2">
+                <img src="/images/localharvest-logo.png" alt="LocalHarvest Hub" height="30"
+                    class="d-inline-block align-text-top me-2">
                 LocalHarvest Hub
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -60,6 +63,7 @@
                                                             <th>Start Date</th>
                                                             <th>Status</th>
                                                             <th>Last Delivery</th>
+                                                            <th>Actions</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -67,29 +71,47 @@
                                                             <tr>
                                                                 <td>
                                                                     <div>${sub.customer.name}</div>
-                                                                    <small class="text-muted">${sub.customer.email}</small>
+                                                                    <small
+                                                                        class="text-muted">${sub.customer.email}</small>
                                                                 </td>
                                                                 <td>${sub.type}</td>
                                                                 <td>${sub.startDate?datetime.iso}</td>
                                                                 <td>
-                                                                    <span class="badge bg-${sub.active?then('success', 'secondary')}">
+                                                                    <span
+                                                                        class="badge bg-${sub.active?then('success', 'secondary')}">
                                                                         ${sub.active?then('Active', 'Inactive')}
                                                                     </span>
                                                                 </td>
                                                                 <td>
                                                                     <#if sub.lastDeliveryDate??>
                                                                         ${sub.lastDeliveryDate?datetime.iso}
-                                                                    <#else>
-                                                                        Not delivered yet
+                                                                        <#else>
+                                                                            Not delivered yet
                                                                     </#if>
+                                                                </td>
+                                                                <td>
+                                                                    <form
+                                                                        action="/farmers/subscriptions/${sub.id}/delivery"
+                                                                        method="POST" class="d-inline">
+                                                                        <div class="input-group">
+                                                                            <input type="datetime-local"
+                                                                                name="deliveryDate"
+                                                                                class="form-control form-control-sm"
+                                                                                required>
+                                                                            <button type="submit"
+                                                                                class="btn btn-sm btn-outline-primary">
+                                                                                Record Delivery
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
                                                                 </td>
                                                             </tr>
                                                         </#list>
                                                     </tbody>
                                                 </table>
                                             </div>
-                                        <#else>
-                                            <p class="text-muted mb-0">No active subscriptions for this box.</p>
+                                            <#else>
+                                                <p class="text-muted mb-0">No active subscriptions for this box.</p>
                                         </#if>
                                     </div>
                                     <div class="card-footer text-muted">
@@ -97,10 +119,11 @@
                                     </div>
                                 </div>
                             </#list>
-                        <#else>
-                            <div class="alert alert-info">
-                                You don't have any produce boxes yet. <a href="/farmers/boxes/new" class="alert-link">Create your first box</a> to start receiving subscriptions.
-                            </div>
+                            <#else>
+                                <div class="alert alert-info">
+                                    You don't have any produce boxes yet. <a href="/farmers/boxes/new"
+                                        class="alert-link">Create your first box</a> to start receiving subscriptions.
+                                </div>
                         </#if>
                     </div>
                 </div>
@@ -110,4 +133,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
