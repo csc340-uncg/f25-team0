@@ -100,7 +100,7 @@
                             </div>
                             <#else>
                                 <p>No subscriptions yet. Browse our produce boxes to get started!</p>
-                                <a href="/produce-boxes" class="btn btn-primary">Browse Produce Boxes</a>
+                                <a href="/customers/boxes" class="btn btn-primary">Browse Produce Boxes</a>
                         </#if>
                     </div>
                 </div>
